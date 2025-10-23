@@ -1,34 +1,31 @@
-# Getting Started - Complete Guide
+````markdown
+# Getting Started - Complete Setup Guide
 
 ## 🎯 Project Overview
 
 This is a **complete test automation framework** for the Genpact QA Home Assignment. It contains:
-- ✅ 15 automated tests covering all 3 tasks
-- ✅ Clean architecture with POM pattern
+- ✅ All 3 tasks fully implemented
+- ✅ 15 automated tests with clean architecture
 - ✅ UI and API testing capabilities
-- ✅ HTML report generation
+- ✅ Automated test execution scripts
+- ✅ HTML report generation with auto-open
 - ✅ Screenshot capture on failures
-- ✅ Comprehensive documentation
 
-## 📋 Prerequisites Checklist
+## 📋 Prerequisites
 
 Before you begin, ensure you have:
 
-- [ ] **macOS** 11.0 or higher (your current OS)
-- [ ] **.NET 8.0 SDK** - [Installation Guide](INSTALLATION.md)
-- [ ] **PowerShell** (for Playwright) - Usually pre-installed on macOS
-- [ ] **Internet connection** - To download browsers and run tests
-- [ ] **Git** (optional) - For version control
+- **macOS** 11.0 or higher
+- **.NET 8.0 SDK** (installation instructions below)
+- **Internet connection** (to download browsers and run tests)
 
-## 🚀 Step-by-Step Setup
+## 🚀 Quick Start (3 Steps)
 
-### Step 1: Install .NET SDK
+### Step 1: Install .NET SDK (5 minutes)
 
-**.NET is currently NOT installed on your system.** You need to install it first.
-
-**Quick Install (Recommended):**
+**Using Homebrew (Recommended):**
 ```bash
-# Using Homebrew
+# Install .NET SDK
 brew install --cask dotnet-sdk
 
 # Verify installation
@@ -36,21 +33,21 @@ dotnet --version
 # Should show: 8.0.x
 ```
 
-**Detailed instructions:** See [INSTALLATION.md](INSTALLATION.md)
+**Alternative - Direct Download:**
+1. Visit: https://dotnet.microsoft.com/download
+2. Download .NET 8.0 SDK for macOS
+3. Run the installer (.pkg file)
+4. Restart your terminal
 
-### Step 2: Verify .NET Installation
-
+**Troubleshooting:**
+If `dotnet` command not found after install:
 ```bash
-# Check .NET version
-dotnet --version
-
-# List installed SDKs
-dotnet --list-sdks
-
-# You should see .NET 8.0.x in the list
+# Restart terminal completely, or add to PATH:
+export PATH="$PATH:/usr/local/share/dotnet"
+source ~/.zshrc
 ```
 
-### Step 3: Run Automated Setup
+### Step 2: Run Setup Script (2 minutes)
 
 ```bash
 # Navigate to project directory
@@ -59,35 +56,130 @@ cd "/Users/roma/QA- Home_Assignment_Genpact"
 # Make setup script executable
 chmod +x setup.sh
 
-# Run setup
+# Run automated setup
 ./setup.sh
 ```
 
-This will:
+This will automatically:
 1. ✅ Restore NuGet packages
 2. ✅ Build the project
 3. ✅ Install Playwright browsers (Chromium, Firefox, WebKit)
 
-### Step 4: Run Tests
+### Step 3: Run Tests with Auto-Report (2 minutes)
+
+**🎯 RECOMMENDED: Use automated test script**
 
 ```bash
-# Run all tests
+# Run tests and automatically open HTML report
+./run-tests.sh
+```
+
+This script will:
+1. ✅ Execute all tests
+2. ✅ Display colored results in terminal
+3. ✅ **Automatically open ExtentTestReport.html in your browser**
+4. ✅ Show you pass/fail summary
+
+**That's it!** Your tests will run and the report will open automatically! 🎉
+
+---
+
+## 📊 Running Tests - Multiple Options
+
+### Option 1: Automated Script with Report (RECOMMENDED) ✨
+
+```bash
+# Run all tests + auto-open report
+./run-tests.sh
+```
+
+**Output:**
+```
+🧪 Running tests...
+Test run for WikipediaPlaywrightTests.dll
+✅ Task1_CompareDebuggingFeaturesSectionFromUIAndAPI - PASSED
+✅ Task2_ValidateAllTechnologyNamesAreLinks - PASSED  
+✅ Task3_ChangeColorToDarkAndValidate - PASSED
+
+==========================================
+✅ Tests completed successfully!
+📊 Opening Extent Test Report...
+   Report location: TestResults/ExtentTestReport.html
+✅ Report opened in browser!
+==========================================
+```
+
+### Option 2: PowerShell Script (Cross-platform)
+
+```bash
+# For Windows/macOS/Linux
+./run-tests.ps1
+```
+
+### Option 3: Manual (Traditional)
+
+```bash
+# Run tests
 dotnet test
 
-# Tests will execute and generate reports
+# Then manually open report
+open TestResults/ExtentTestReport.html
 ```
 
-### Step 5: View Results
+### Option 4: Run Specific Tests
 
 ```bash
-# Open HTML report in browser
-open test-results/TestReport.html
+# Task 1 only - Extract and compare sections
+dotnet test --filter "FullyQualifiedName~Task1"
+open TestResults/ExtentTestReport.html
 
-# View screenshots (if any failures)
-open Screenshots/
+# Task 2 only - Validate technology links  
+dotnet test --filter "FullyQualifiedName~Task2"
+open TestResults/ExtentTestReport.html
+
+# Task 3 only - Change color theme
+dotnet test --filter "FullyQualifiedName~Task3"
+open TestResults/ExtentTestReport.html
 ```
 
-## 🔧 Manual Setup (Alternative)
+## � Understanding Test Results
+
+### Console Output
+During test execution, you'll see:
+```
+✓ Test passed successfully
+✗ Test failed (with error details)
+→ Test in progress (with step logs)
+```
+
+### HTML Report (Auto-Opens!)
+When using `./run-tests.sh`, the report automatically opens in your browser.
+
+The **ExtentTestReport.html** includes:
+- 📊 Test execution summary (Pass/Fail counts)
+- ⏱️ Execution time per test
+- 📝 Detailed step-by-step logs
+- 📸 Screenshots (on failure)
+- 🎨 Dark theme for better readability
+- 💻 System information
+
+**Manual access:**
+```bash
+open TestResults/ExtentTestReport.html
+```
+
+### Screenshots
+If any test fails, screenshots are automatically saved to:
+```
+Screenshots/
+├── Task1_TestName_20241023_143052.png
+├── Task2_TestName_20241023_143125.png
+└── Task3_TestName_20241023_143158.png
+```
+
+---
+
+## �🔧 Manual Setup (Alternative)
 
 If automated setup doesn't work, follow these manual steps:
 
@@ -104,30 +196,43 @@ dotnet build
 # 4. Install Playwright browsers
 pwsh bin/Debug/net8.0/playwright.ps1 install
 
-# 5. Run tests
-dotnet test
+# 5. Run tests with auto-report
+./run-tests.sh
 ```
 
-## 🧪 Running Tests
+---
 
-### Run All Tests (Recommended for first time)
-```bash
-dotnet test
+## 🎯 Test Script Features
+
+Both `run-tests.sh` and `run-tests.ps1` provide:
+
+✅ **Colored terminal output** - Better readability  
+✅ **Test execution status** - Real-time feedback  
+✅ **Automatic report opening** - No manual steps  
+✅ **Error handling** - Checks if report exists  
+✅ **Exit codes** - Matches test results for CI/CD  
+
+**Script output example:**
+```
+🧪 Running tests...
+
+Test run for WikipediaPlaywrightTests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0
+
+Passed!  - Failed:     0, Passed:     5, Skipped:     0, Total:     5
+
+==========================================
+✅ Tests completed successfully!
+📊 Opening Extent Test Report...
+   Report location: TestResults/ExtentTestReport.html
+✅ Report opened in browser!
+==========================================
 ```
 
-### Run Specific Task
-```bash
-# Task 1: Extract and compare sections
-dotnet test --filter "FullyQualifiedName~Task1"
+---
 
-# Task 2: Validate technology links
-dotnet test --filter "FullyQualifiedName~Task2"
+## 🔍 Advanced: Run by Category
 
-# Task 3: Change color theme
-dotnet test --filter "FullyQualifiedName~Task3"
-```
-
-### Run by Category
 ```bash
 # UI tests only
 dotnet test --filter "Category=UI"
@@ -137,46 +242,11 @@ dotnet test --filter "Category=API"
 
 # Integration tests (UI + API combined)
 dotnet test --filter "Category=Integration"
-
-# Unit tests
-dotnet test --filter "Category=Unit"
 ```
 
-### Run with Detailed Output
+**Note:** After running filtered tests, manually open report:
 ```bash
-dotnet test --verbosity detailed
-```
-
-## 📊 Understanding Results
-
-### Console Output
-During test execution, you'll see:
-```
-✓ Test passed successfully
-✗ Test failed (with error details)
-→ Test in progress (with step logs)
-```
-
-### HTML Report
-After tests complete:
-```bash
-open test-results/TestReport.html
-```
-
-The report shows:
-- 📊 Test execution summary (Pass/Fail counts)
-- ⏱️ Execution time per test
-- 📝 Detailed step-by-step logs
-- 📸 Screenshots (on failure)
-- 💻 System information
-
-### Screenshots
-If any test fails, screenshots are saved to:
-```
-Screenshots/
-├── Task1_TestName_20241022_143052.png
-├── Task2_TestName_20241022_143125.png
-└── Task3_TestName_20241022_143158.png
+open TestResults/ExtentTestReport.html
 ```
 
 ## 📁 Project Structure Quick Reference
@@ -218,52 +288,78 @@ WikipediaPlaywrightTests/
     └── GETTING_STARTED.md           # This file
 ```
 
-## 🎯 What Each Task Does
+## 🎯 What Each Task Tests
 
-### Task 1: Extract and Compare Debugging Features
+### ✅ Task 1: Extract and Compare Debugging Features
 **File:** `Tests/Task1_DebuggingFeaturesTests.cs`
 
 **What it does:**
 1. Opens Wikipedia Playwright page
-2. Extracts "Debugging features" section using UI (POM)
-3. Extracts same section using MediaWiki Parse API
-4. Normalizes both texts (removes special chars, lowercase)
-5. Counts unique words in each
-6. Asserts that counts are equal
+2. Extracts "Debugging features" section via UI (POM)
+3. Extracts same section via MediaWiki Parse API
+4. Normalizes both texts
+5. Counts unique words
+6. Asserts equality
 
-**Why it's important:** Tests both UI and API extraction methods and validates data consistency.
+**Run it:**
+```bash
+dotnet test --filter "FullyQualifiedName~Task1"
+open TestResults/ExtentTestReport.html
+```
 
-### Task 2: Validate Microsoft Development Tools Links
+---
+
+### ✅ Task 2: Validate Microsoft Development Tools Links
 **File:** `Tests/Task2_MicrosoftDevToolsTests.cs`
 
 **What it does:**
 1. Navigates to "Microsoft development tools" section
-2. Extracts all technology names (e.g., "Visual Studio Code")
-3. Checks if each technology name is a clickable link
-4. Fails the test if any technology is NOT a link
+2. Extracts all technology names
+3. Validates each technology is a clickable link
+4. Fails if any technology is NOT a link
 
-**Why it's important:** Ensures critical navigation elements are functional.
+**Run it:**
+```bash
+dotnet test --filter "FullyQualifiedName~Task2"
+open TestResults/ExtentTestReport.html
+```
 
-### Task 3: Change Color Theme to Dark
+---
+
+### ✅ Task 3: Change Color Theme to Dark
 **File:** `Tests/Task3_ColorThemeTests.cs`
 
 **What it does:**
 1. Captures initial theme state
 2. Clicks "Color (beta)" button
 3. Selects "Dark" mode
-4. Verifies theme changed using:
-   - CSS class checks
-   - Computed style validation
+4. Verifies theme changed (CSS + computed styles)
 5. Takes before/after screenshots
 
-**Why it's important:** Tests dynamic UI changes and validates visual modifications.
+**Run it:**
+```bash
+dotnet test --filter "FullyQualifiedName~Task3"
+open TestResults/ExtentTestReport.html
+```
 
 ## 🔍 Troubleshooting
 
-### Issue: "dotnet: command not found"
-**Solution:** Install .NET SDK - See [INSTALLATION.md](INSTALLATION.md)
+### "dotnet: command not found"
+**Solution:** Install .NET SDK
+```bash
+brew install --cask dotnet-sdk
+# Restart terminal
+dotnet --version
+```
 
-### Issue: Build fails with package errors
+### "Permission denied" on scripts
+**Solution:**
+```bash
+chmod +x setup.sh
+chmod +x run-tests.sh
+```
+
+### Build fails with package errors
 **Solution:**
 ```bash
 dotnet clean
@@ -271,120 +367,104 @@ dotnet restore
 dotnet build
 ```
 
-### Issue: Playwright browsers not installed
+### Playwright browsers not installed
 **Solution:**
 ```bash
 pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
 ```
 
-### Issue: Tests timeout
+### Report doesn't auto-open
+**Solution:** Open manually
+```bash
+open TestResults/ExtentTestReport.html
+```
+
+### Tests timeout
 **Solution:** Increase timeout in `Config/TestConfiguration.cs`:
 ```csharp
 public static int DefaultTimeout => 60000; // 60 seconds
 ```
 
-### Issue: Cannot open HTML report
-**Solution:** 
-```bash
-# Find the report
-ls -la test-results/
+---
 
-# Open manually
-open test-results/TestReport.html
-```
-
-### Issue: Permission denied on setup.sh
-**Solution:**
-```bash
-chmod +x setup.sh
-./setup.sh
-```
-
-## 📚 Additional Resources
-
-- **README.md** - Comprehensive project overview
-- **ARCHITECTURE.md** - Detailed architecture and design patterns
-- **QUICKSTART.md** - Quick reference guide
-- **INSTALLATION.md** - .NET SDK installation guide
-- **SUMMARY.md** - Project summary and achievements
-
-## ✅ Verification Checklist
-
-Before running tests, verify:
-
-- [ ] .NET SDK is installed (`dotnet --version`)
-- [ ] Project builds successfully (`dotnet build`)
-- [ ] Playwright browsers are installed
-- [ ] Internet connection is active
-- [ ] No other browser sessions interfering
-
-## 🎓 Learning Path
-
-**For Reviewers:**
-1. Read README.md (5 min)
-2. Review ARCHITECTURE.md (10 min)
-3. Run tests (`dotnet test`) (2 min)
-4. Check HTML report (5 min)
-5. Examine code files (20 min)
-
-**For Developers:**
-1. Complete setup (10 min)
-2. Run tests and explore (15 min)
-3. Read code with inline comments (30 min)
-4. Modify and extend (ongoing)
-
-## 🚀 Quick Commands Reference
+## � Quick Reference Commands
 
 ```bash
-# Setup
-chmod +x setup.sh && ./setup.sh
+# 1️⃣ SETUP (One-time)
+brew install --cask dotnet-sdk    # Install .NET
+chmod +x setup.sh                 # Make script executable
+./setup.sh                        # Run setup
 
-# Build
-dotnet build
+# 2️⃣ RUN TESTS (Recommended)
+./run-tests.sh                    # Run tests + auto-open report
 
-# Run all tests
-dotnet test
+# 3️⃣ ALTERNATIVE METHODS
+./run-tests.ps1                   # PowerShell version
+dotnet test                       # Traditional way
 
-# Run specific task
-dotnet test --filter "FullyQualifiedName~Task1"
+# 4️⃣ SPECIFIC TESTS
+dotnet test --filter "Task1"      # Task 1 only
+dotnet test --filter "Task2"      # Task 2 only
+dotnet test --filter "Task3"      # Task 3 only
 
-# Run with verbose output
-dotnet test --verbosity detailed
+# 5️⃣ VIEW REPORT MANUALLY
+open TestResults/ExtentTestReport.html
 
-# View report
-open test-results/TestReport.html
-
-# Clean and rebuild
+# 6️⃣ TROUBLESHOOTING
 dotnet clean && dotnet restore && dotnet build
+chmod +x run-tests.sh
 ```
-
-## 💡 Tips for Success
-
-1. **First time?** Run all tests to see the full suite in action
-2. **Checking specific task?** Use filter to run individual tests
-3. **Test failed?** Check screenshots and HTML report for details
-4. **Modifying code?** Follow the patterns in existing files
-5. **Need help?** Check inline code comments
-
-## 🎉 Next Steps
-
-Once setup is complete:
-
-1. ✅ Run the full test suite
-2. ✅ Review the HTML report
-3. ✅ Examine the code structure
-4. ✅ Read the architecture documentation
-5. ✅ Explore individual test files
-
-## 📧 Support
-
-For questions about:
-- **Installation**: See INSTALLATION.md
-- **Architecture**: See ARCHITECTURE.md
-- **Quick reference**: See QUICKSTART.md
-- **Project overview**: See README.md
-- **Implementation details**: Check inline code comments
 
 ---
 
-**Ready to begin!** Start with installing .NET SDK, then run `./setup.sh` 🚀
+## ✅ Success Checklist
+
+Before running tests, verify:
+
+- [x] .NET SDK installed (`dotnet --version`)
+- [x] Setup script executed (`./setup.sh`)
+- [x] Project builds (`dotnet build`)
+- [x] Scripts are executable (`chmod +x`)
+- [x] Internet connection active
+
+---
+
+## 📖 Additional Documentation
+
+| Document | Purpose | Time |
+|----------|---------|------|
+| **README.md** | Project overview | 10 min |
+| **ARCHITECTURE.md** | Design & patterns | 10 min |
+| **PROJECT_STRUCTURE.md** | File organization | 5 min |
+| **INDEX.md** | All documentation | 2 min |
+
+---
+
+## � Next Steps
+
+1. ✅ Run `./run-tests.sh`
+2. ✅ Review ExtentTestReport.html (auto-opens!)
+3. ✅ Check test code in `Tests/` folder
+4. ✅ Read README.md for full details
+
+---
+
+## � Pro Tips
+
+🔹 **First time?** Use `./run-tests.sh` - it does everything automatically  
+🔹 **Report doesn't open?** Check `TestResults/ExtentTestReport.html` manually  
+🔹 **Test failed?** Check Screenshots/ folder for visual evidence  
+🔹 **Want details?** Review inline code comments in test files  
+
+---
+
+## 🎉 You're Ready!
+
+**Total setup time: ~10 minutes**
+
+1. Install .NET (5 min)
+2. Run setup (2 min)
+3. Run tests (2 min)
+4. View report (1 min)
+
+**Start with:** `./run-tests.sh` 🚀
