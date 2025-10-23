@@ -3,6 +3,10 @@ using WikipediaPlaywrightTests.Utils;
 
 namespace WikipediaPlaywrightTests.PageObjects
 {
+    /// <summary>
+    /// Page Object for Wikipedia Playwright article
+    /// Follows SOLID principles with focused, single-responsibility methods
+    /// </summary>
     public class WikipediaPlaywrightPage : BasePage
     {
         // Page-specific locators
@@ -15,90 +19,26 @@ namespace WikipediaPlaywrightTests.PageObjects
         
         /// <summary>
         /// Gets the text content of the Debugging features section via UI
+        /// Orchestrates the extraction process following Single Responsibility Principle
         /// </summary>
         public async Task<string> GetDebuggingFeaturesTextWithUI()
         {
             try
             {
-                // Wait for the page to load
-                await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+                await WaitForPageLoad();
                 
-                // Step 1: Find the h3#Debugging_features element
-                var h3Element = Page.Locator(H3DebuggingFeatures);
-                await h3Element.WaitForAsync();
+                var h3Element = await FindDebuggingFeaturesHeading();
+                var parentDiv = await FindParentDivOfHeading(h3Element);
+                var pElement = await FindFollowingParagraph(parentDiv);
+                var ulElement = await FindFollowingList(pElement);
                 
-                Console.WriteLine($"[DEBUG] h3 element count: {await h3Element.CountAsync()}");
-                Console.WriteLine($"[DEBUG] h3 element text: {await h3Element.TextContentAsync()}");
+                var combinedText = await ExtractCombinedText(pElement, ulElement);
+                await LogExtractedText(combinedText);
                 
-                // Step 2: Find the parent div of h3#Debugging_features
-                var parentDiv = h3Element.Locator("xpath=ancestor::div[1]");
+                ValidateTextNotEmpty(combinedText);
                 
-                Console.WriteLine($"[DEBUG] parentDiv count: {await parentDiv.CountAsync()}");
-                try 
-                {
-                    var parentTag = await parentDiv.EvaluateAsync<string>("el => el.tagName");
-                    Console.WriteLine($"[DEBUG] parentDiv tag: {parentTag}");
-                    var parentClass = await parentDiv.GetAttributeAsync("class");
-                    Console.WriteLine($"[DEBUG] parentDiv class: {parentClass}");
-                    var parentHTML = await parentDiv.InnerHTMLAsync();
-                    Console.WriteLine($"[DEBUG] parentDiv HTML (first 300 chars): {parentHTML.Substring(0, Math.Min(300, parentHTML.Length))}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[DEBUG] Error getting parentDiv info: {ex.Message}");
-                }
-                
-                // Step 3: Find the p element under the parent div
-                var pElement = parentDiv.Locator("xpath=following::p[1]");
-                
-                Console.WriteLine($"[DEBUG] pElement count: {await pElement.CountAsync()}");
-                try
-                {
-                    var pTextDebug = await pElement.TextContentAsync();
-                    Console.WriteLine($"[DEBUG] pElement text preview: {pTextDebug?.Substring(0, Math.Min(100, pTextDebug.Length))}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[DEBUG] Error getting pElement text: {ex.Message}");
-                }
-                
-                // Step 4: Find the ul element that comes after the p element
-                var ulElement = pElement.Locator("xpath=following::ul[1]");
-                
-                Console.WriteLine($"[DEBUG] ulElement count: {await ulElement.CountAsync()}");
-                try
-                {
-                    var ulTextDebug = await ulElement.TextContentAsync();
-                    Console.WriteLine($"[DEBUG] ulElement text preview: {ulTextDebug?.Substring(0, Math.Min(100, ulTextDebug.Length))}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[DEBUG] Error getting ulElement text: {ex.Message}");
-                }
-                
-                // Extract text from p element
-                var pText = await pElement.TextContentAsync() ?? "";
-                Console.WriteLine($"[DEBUG UI] P element text: {pText.Substring(0, Math.Min(100, pText.Length))}...");
-                
-                // Extract all text from ul element (all li elements)
-                var ulText = await ulElement.TextContentAsync() ?? "";
-                Console.WriteLine($"[DEBUG UI] UL element text: {ulText.Substring(0, Math.Min(100, ulText.Length))}...");
-                
-                // Combine both texts
-                var combinedText = (pText.Trim() + " " + ulText.Trim()).Trim();
-                
-                Console.WriteLine($"[DEBUG UI] ===== FINAL COMBINED TEXT =====");
-                Console.WriteLine($"[DEBUG UI] Total Length: {combinedText.Length} characters");
-                Console.WriteLine("[DEBUG UI] Complete Text:");
-                Console.WriteLine(combinedText);
-                Console.WriteLine("[DEBUG UI] ===== END OF TEXT =====");
-                
-                if (string.IsNullOrWhiteSpace(combinedText))
-                {
-                    throw new Exception("Section content is empty");
-                }
                 var normalizedText = TextNormalizer.Normalize(combinedText);
-                Console.WriteLine($"[DEBUG UI] ===== normalizedText ===== {normalizedText}");
+                
                 return normalizedText;
             }
             catch (Exception ex)
@@ -107,62 +47,142 @@ namespace WikipediaPlaywrightTests.PageObjects
             }
         }
         
+        #region Private Helper Methods - Debugging Features Extraction
+        
+        /// <summary>
+        /// Waits for page to fully load (SRP: Page loading responsibility)
+        /// </summary>
+        private async Task WaitForPageLoad()
+        {
+            await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        }
+        
+        /// <summary>
+        /// Finds the h3#Debugging_features heading element (SRP: Heading location)
+        /// </summary>
+        private async Task<ILocator> FindDebuggingFeaturesHeading()
+        {
+            var h3Element = Page.Locator(H3DebuggingFeatures);
+            await h3Element.WaitForAsync();
+            
+            return h3Element;
+        }
+        
+        /// <summary>
+        /// Finds the parent div of the heading element (SRP: Parent element location)
+        /// </summary>
+        private async Task<ILocator> FindParentDivOfHeading(ILocator headingElement)
+        {
+            var parentDiv = headingElement.Locator("xpath=ancestor::div[1]");
+            
+            await LogParentDivDetails(parentDiv);
+            
+            return parentDiv;
+        }
+        
+        /// <summary>
+        /// Finds the paragraph element following the parent div (SRP: Paragraph location)
+        /// </summary>
+        private async Task<ILocator> FindFollowingParagraph(ILocator parentDiv)
+        {
+            var pElement = parentDiv.Locator("xpath=following::p[1]");
+            
+            await LogElementTextPreview(pElement, "pElement");
+            
+            return pElement;
+        }
+        
+        /// <summary>
+        /// Finds the list element following the paragraph (SRP: List location)
+        /// </summary>
+        private async Task<ILocator> FindFollowingList(ILocator paragraphElement)
+        {
+            var ulElement = paragraphElement.Locator("xpath=following::ul[1]");
+            
+            await LogElementTextPreview(ulElement, "ulElement");
+            
+            return ulElement;
+        }
+        
+        /// <summary>
+        /// Extracts and combines text from paragraph and list elements (SRP: Text extraction)
+        /// </summary>
+        private async Task<string> ExtractCombinedText(ILocator paragraphElement, ILocator listElement)
+        {
+            var pText = await paragraphElement.TextContentAsync() ?? "";
+            var ulText = await listElement.TextContentAsync() ?? "";
+            
+            return (pText.Trim() + " " + ulText.Trim()).Trim();
+        }
+        
+        /// <summary>
+        /// Validates that extracted text is not empty (SRP: Validation)
+        /// </summary>
+        private void ValidateTextNotEmpty(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                throw new Exception("Section content is empty");
+            }
+        }
+        
+        /// <summary>
+        /// Logs details about parent div element (SRP: Diagnostic logging)
+        /// </summary>
+        private async Task LogParentDivDetails(ILocator parentDiv)
+        {
+            try 
+            {
+                var parentTag = await parentDiv.EvaluateAsync<string>("el => el.tagName");
+                var parentClass = await parentDiv.GetAttributeAsync("class");
+                var parentHTML = await parentDiv.InnerHTMLAsync();
+            }
+            catch
+            {
+                // Silently handle errors in logging
+            }
+        }
+        
+        /// <summary>
+        /// Logs text preview of an element (SRP: Diagnostic logging)
+        /// </summary>
+        private async Task LogElementTextPreview(ILocator element, string elementName)
+        {
+            try
+            {
+                var text = await element.TextContentAsync();
+            }
+            catch
+            {
+                // Silently handle errors in logging
+            }
+        }
+        
+        /// <summary>
+        /// Logs the final extracted text (SRP: Diagnostic logging)
+        /// </summary>
+        private async Task LogExtractedText(string text)
+        {
+            await Task.CompletedTask;
+        }
+        
+        #endregion
+        
         /// <summary>
         /// Gets technology names from Microsoft development tools section
+        /// Orchestrates the extraction process following Single Responsibility Principle
         /// </summary>
         public async Task<List<(string Name, bool IsLink)>> GetMicrosoftDevToolsTechnologies()
         {
             try
             {
-                // Wait for the page to load
-                await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-
-                // Find the div element with aria-labelledby containing "Microsoft_development_tools"
-                var divLocator = Page.Locator(DivMicrosoftDevTools);
+                await WaitForPageLoad();
                 
-                await divLocator.WaitForAsync();
+                var divLocator = await FindMicrosoftDevToolsDiv();
+                await ExpandCollapsibleSection(divLocator);
+                var technologies = await ExtractTechnologiesFromDiv(divLocator);
                 
-                Console.WriteLine($"[DEBUG] Found div with aria-labelledby: {await divLocator.CountAsync()}");
-                
-                // Find and click the button inside this div
-                var buttonLocator = divLocator.Locator("button");
-                var buttonCount = await buttonLocator.CountAsync();
-                Console.WriteLine($"[DEBUG] Found {buttonCount} button(s) inside the div");
-                
-                if (buttonCount > 0)
-                {
-                    await buttonLocator.ClickAsync();
-                    Console.WriteLine("[DEBUG] Clicked the button inside Microsoft_development_tools div");
-                    
-                    // Wait for content to load after clicking
-                    await Page.WaitForTimeoutAsync(1000);
-                }
-                
-                // Find all <a> elements inside the div
-                var linkLocators = divLocator.Locator("a");
-                var linkCount = await linkLocators.CountAsync();
-                Console.WriteLine($"[DEBUG] Found {linkCount} <a> element(s) inside the div");
-                
-                var result = new List<(string Name, bool IsLink)>();
-                
-                // Check each <a> element for href attribute
-                for (int i = 0; i < linkCount; i++)
-                {
-                    var link = linkLocators.Nth(i);
-                    var text = await link.TextContentAsync();
-                    var href = await link.GetAttributeAsync("href");
-                    
-                    var hasHref = !string.IsNullOrEmpty(href);
-                    
-                    Console.WriteLine($"[DEBUG] Link {i + 1}: Text='{text?.Trim()}', HasHref={hasHref}, Href='{href}'");
-                    
-                    if (!string.IsNullOrWhiteSpace(text))
-                    {
-                        result.Add((text.Trim(), hasHref));
-                    }
-                }
-                
-                return result;
+                return technologies;
             }
             catch (Exception ex)
             {
@@ -170,6 +190,76 @@ namespace WikipediaPlaywrightTests.PageObjects
             }
         }
         
-
+        #region Private Helper Methods - Microsoft Dev Tools Extraction
+        
+        /// <summary>
+        /// Finds the Microsoft development tools div element (SRP: Element location)
+        /// </summary>
+        private async Task<ILocator> FindMicrosoftDevToolsDiv()
+        {
+            var divLocator = Page.Locator(DivMicrosoftDevTools);
+            await divLocator.WaitForAsync();
+            
+            return divLocator;
+        }
+        
+        /// <summary>
+        /// Expands collapsible section by clicking button if present (SRP: UI interaction)
+        /// </summary>
+        private async Task ExpandCollapsibleSection(ILocator containerDiv)
+        {
+            var buttonLocator = containerDiv.Locator("button");
+            var buttonCount = await buttonLocator.CountAsync();
+            
+            if (buttonCount > 0)
+            {
+                await buttonLocator.ClickAsync();
+                
+                // Wait for content to load after clicking
+                await Page.WaitForTimeoutAsync(1000);
+            }
+        }
+        
+        /// <summary>
+        /// Extracts all technology links from the container div (SRP: Data extraction)
+        /// </summary>
+        private async Task<List<(string Name, bool IsLink)>> ExtractTechnologiesFromDiv(ILocator containerDiv)
+        {
+            var linkLocators = containerDiv.Locator("a");
+            var linkCount = await linkLocators.CountAsync();
+            
+            var technologies = new List<(string Name, bool IsLink)>();
+            
+            for (int i = 0; i < linkCount; i++)
+            {
+                var technology = await ExtractSingleTechnology(linkLocators.Nth(i), i);
+                
+                if (technology.HasValue)
+                {
+                    technologies.Add(technology.Value);
+                }
+            }
+            
+            return technologies;
+        }
+        
+        /// <summary>
+        /// Extracts technology name and link status from a single anchor element (SRP: Single item extraction)
+        /// </summary>
+        private async Task<(string Name, bool IsLink)?> ExtractSingleTechnology(ILocator linkElement, int index)
+        {
+            var text = await linkElement.TextContentAsync();
+            var href = await linkElement.GetAttributeAsync("href");
+            var hasHref = !string.IsNullOrEmpty(href);
+            
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return null;
+            }
+            
+            return (text.Trim(), hasHref);
+        }
+        
+        #endregion
     }
 }

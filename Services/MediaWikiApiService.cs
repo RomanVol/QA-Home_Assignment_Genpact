@@ -31,7 +31,6 @@ namespace WikipediaPlaywrightTests.Services
                 var cleanedText = CleanAndDecodeText(extractedText);
                 var normalizedText = TextNormalizer.Normalize(cleanedText);
                 
-                Console.WriteLine($"[DEBUG API] ===== normalizedText ===== {normalizedText}");
                 return normalizedText;
             }
             catch (Exception ex)
@@ -73,7 +72,6 @@ namespace WikipediaPlaywrightTests.Services
         private async Task<string> FetchSectionHtml(string pageTitle, int sectionNumber)
         {
             var sectionUrl = $"{_apiUrl}?action=parse&page={Uri.EscapeDataString(pageTitle)}&format=json&prop=text&section={sectionNumber}";
-            Console.WriteLine($"[DEBUG] API URL: {sectionUrl}");
             
             var sectionResponse = await _httpClient.GetStringAsync(sectionUrl);
             
@@ -117,8 +115,6 @@ namespace WikipediaPlaywrightTests.Services
         /// </summary>
         private string ExtractParagraphText(HtmlNode parentNode)
         {
-            Console.WriteLine("[DEBUG] ===== EXTRACTING TEXT FROM <p> ELEMENT =====");
-            
             var p = parentNode.SelectSingleNode("following::p[1]");
             if (p == null)
                 return string.Empty;
@@ -130,7 +126,6 @@ namespace WikipediaPlaywrightTests.Services
                     .Where(t => !string.IsNullOrEmpty(t))
             );
             
-            Console.WriteLine($"[DEBUG] P TEXT: {pText}");
             return pText + " ";
         }
         
@@ -139,8 +134,6 @@ namespace WikipediaPlaywrightTests.Services
         /// </summary>
         private string ExtractListItemsText(HtmlNode parentNode)
         {
-            Console.WriteLine("[DEBUG] ===== EXTRACTING TEXT FROM <li> ELEMENTS =====");
-            
             var listItems = parentNode.SelectNodes("following::ul[1]/li");
             if (listItems == null)
                 return string.Empty;
@@ -156,12 +149,8 @@ namespace WikipediaPlaywrightTests.Services
                         .Where(t => !string.IsNullOrEmpty(t))
                 );
                 
-                Console.WriteLine($"[DEBUG] <li> text [{i+1}]: {liText}");
                 extractedText += liText + " ";
             }
-            
-            Console.WriteLine($"[DEBUG] Extracted all {listItems.Count} li elements");
-            Console.WriteLine("[DEBUG] ===== FINISHED EXTRACTING TEXT =====");
             
             return extractedText;
         }
@@ -176,12 +165,6 @@ namespace WikipediaPlaywrightTests.Services
             // Remove reference markers like [1], [2], etc. and collapse whitespace
             plainText = System.Text.RegularExpressions.Regex.Replace(plainText, @"\[\d+\]", " ");
             plainText = System.Text.RegularExpressions.Regex.Replace(plainText, @"\s+", " ").Trim();
-            
-            Console.WriteLine($"[DEBUG] ===== FINAL COMBINED TEXT =====");
-            Console.WriteLine($"[DEBUG] Total Length: {plainText.Length} characters");
-            Console.WriteLine("[DEBUG] Complete Text:");
-            Console.WriteLine(plainText);
-            Console.WriteLine("[DEBUG] ===== END OF TEXT =====");
             
             return plainText;
         }

@@ -38,22 +38,10 @@ namespace WikipediaPlaywrightTests.Tests
             var uiText = await _wikipediaPage.GetDebuggingFeaturesTextWithUI();
             LogInfo($"UI Text extracted (first 100 chars): {uiText.Substring(0, Math.Min(100, uiText.Length))}...");
             
-            // Print complete UI text
-            Console.WriteLine("========== COMPLETE UI TEXT ==========");
-            Console.WriteLine(uiText);
-            Console.WriteLine("========== END UI TEXT ==========");
-            Console.WriteLine();
-            
             // Act - Step 2: Extract via API (MediaWiki Parse API)
             LogInfo("Extracting Debugging features section via MediaWiki API");
             var apiText = await _apiService!.GetSectionText(TestConfiguration.DefaultPageTitle, "Debugging features");
             LogInfo($"API Text extracted (first 100 chars): {apiText.Substring(0, Math.Min(100, apiText.Length))}...");
-            
-            // Print complete API text
-            Console.WriteLine("========== COMPLETE API TEXT ==========");
-            Console.WriteLine(apiText);
-            Console.WriteLine("========== END API TEXT ==========");
-            Console.WriteLine();
             
             // Act - Step 3: Normalize both texts
             LogInfo("Normalizing both texts");
@@ -114,23 +102,9 @@ namespace WikipediaPlaywrightTests.Tests
             
             var text = await _wikipediaPage.GetDebuggingFeaturesTextWithUI();
             
-            // Print the raw text to console
-            Console.WriteLine("=== RAW UI TEXT ===");
-            Console.WriteLine(text);
-            Console.WriteLine("=== END RAW TEXT ===");
-            Console.WriteLine();
-            
             var normalizedText = TextNormalizer.Normalize(text);
             
-            // Print normalized text to console
-            Console.WriteLine("=== NORMALIZED TEXT ===");
-            Console.WriteLine(normalizedText);
-            Console.WriteLine("=== END NORMALIZED TEXT ===");
-            Console.WriteLine();
-            
             var uniqueWords = TextNormalizer.CountUniqueWords(normalizedText);
-            
-            Console.WriteLine($"Total unique words: {uniqueWords}");
             
             // Assert
             text.Should().NotBeNullOrWhiteSpace("Debugging features section should contain text");
@@ -150,23 +124,9 @@ namespace WikipediaPlaywrightTests.Tests
             // Act
             var text = await _apiService!.GetSectionText(TestConfiguration.DefaultPageTitle, "Debugging features");
             
-            // Print the raw text to console
-            Console.WriteLine("=== RAW API TEXT ===");
-            Console.WriteLine(text);
-            Console.WriteLine("=== END RAW TEXT ===");
-            Console.WriteLine();
-            
             var normalizedText = TextNormalizer.Normalize(text);
             
-            // Print normalized text to console
-            Console.WriteLine("=== NORMALIZED TEXT ===");
-            Console.WriteLine(normalizedText);
-            Console.WriteLine("=== END NORMALIZED TEXT ===");
-            Console.WriteLine();
-            
             var uniqueWords = TextNormalizer.CountUniqueWords(normalizedText);
-            
-            Console.WriteLine($"Total unique words: {uniqueWords}");
             
             // Assert
             text.Should().NotBeNullOrWhiteSpace("Debugging features section should contain text");
