@@ -14,9 +14,9 @@ namespace WikipediaPlaywrightTests.PageObjects
         }
         
         /// <summary>
-        /// Gets the text content of the Debugging features section
+        /// Gets the text content of the Debugging features section via UI
         /// </summary>
-        public async Task<string> GetDebuggingFeaturesText()
+        public async Task<string> GetDebuggingFeaturesTextWithUI()
         {
             try
             {

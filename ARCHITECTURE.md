@@ -72,7 +72,7 @@ This project follows a clean architecture pattern with clear separation of conce
 4. Comparison: Counts unique words and asserts equality
 
 **Key Classes:**
-- `WikipediaPlaywrightPage.GetDebuggingFeaturesText()`
+- `WikipediaPlaywrightPage.GetDebuggingFeaturesTextWithUI()`
 - `MediaWikiApiService.GetSectionText()`
 - `TextNormalizer.Normalize()` and `CountUniqueWords()`
 

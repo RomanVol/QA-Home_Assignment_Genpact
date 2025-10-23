@@ -35,7 +35,7 @@ namespace WikipediaPlaywrightTests.Tests
             await _wikipediaPage.WaitForLoad();
             
             LogInfo("Extracting Debugging features section via UI");
-            var uiText = await _wikipediaPage.GetDebuggingFeaturesText();
+            var uiText = await _wikipediaPage.GetDebuggingFeaturesTextWithUI();
             LogInfo($"UI Text extracted (first 100 chars): {uiText.Substring(0, Math.Min(100, uiText.Length))}...");
             
             // Print complete UI text
@@ -112,7 +112,7 @@ namespace WikipediaPlaywrightTests.Tests
             await _wikipediaPage!.NavigateTo(TestConfiguration.WikipediaPlaywrightUrl);
             await _wikipediaPage.WaitForLoad();
             
-            var text = await _wikipediaPage.GetDebuggingFeaturesText();
+            var text = await _wikipediaPage.GetDebuggingFeaturesTextWithUI();
             
             // Print the raw text to console
             Console.WriteLine("=== RAW UI TEXT ===");

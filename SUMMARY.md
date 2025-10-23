@@ -293,7 +293,7 @@ This project demonstrates:
 
 | Requirement | Implementation | Status |
 |-------------|----------------|--------|
-| Extract Debugging features via UI | `WikipediaPlaywrightPage.GetDebuggingFeaturesText()` | ✅ |
+| Extract Debugging features via UI | `WikipediaPlaywrightPage.GetDebuggingFeaturesTextWithUI()` | ✅ |
 | Extract via MediaWiki API | `MediaWikiApiService.GetSectionText()` | ✅ |
 | Normalize texts | `TextNormalizer.Normalize()` | ✅ |
 | Count unique words | `TextNormalizer.CountUniqueWords()` | ✅ |

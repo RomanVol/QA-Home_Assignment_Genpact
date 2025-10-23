@@ -49,7 +49,7 @@ QA- Home_Assignment_Genpact/
 │   │   └── IsAppearanceMenuAccessible()    # Task 3: Verify menu access
 │   │
 │   └── 📄 WikipediaPlaywrightPage.cs       # Wikipedia-specific page
-│       ├── GetDebuggingFeaturesText()       # Task 1: Extract section via UI
+│       ├── GetDebuggingFeaturesTextWithUI()  # Task 1: Extract section via UI
 │       └── GetMicrosoftDevToolsTechnologies() # Task 2: Get tech names
 │
 ├── 🔌 Services/ (API Integration)

@@ -12,7 +12,7 @@
 
 | Requirement | Status | Implementation |
 |------------|--------|----------------|
-| Task 1: Extract Debugging features via UI | ✅ DONE | `WikipediaPlaywrightPage.GetDebuggingFeaturesText()` |
+| Task 1: Extract Debugging features via UI | ✅ DONE | `WikipediaPlaywrightPage.GetDebuggingFeaturesTextWithUI()` |
 | Task 1: Extract via MediaWiki Parse API | ✅ DONE | `MediaWikiApiService.GetSectionText()` |
 | Task 1: Normalize texts | ✅ DONE | `TextNormalizer.Normalize()` |
 | Task 1: Count unique words | ✅ DONE | `TextNormalizer.CountUniqueWords()` |
