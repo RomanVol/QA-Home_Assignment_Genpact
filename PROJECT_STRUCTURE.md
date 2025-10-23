@@ -13,15 +13,22 @@ QA- Home_Assignment_Genpact/
 │   ├── 📄 GETTING_STARTED.md               # Step-by-step setup guide
 │   ├── 📄 QUICKSTART.md                    # Quick reference guide
 │   ├── 📄 ARCHITECTURE.md                  # Architecture documentation
+│   ├── 📄 FLEXIBILITY_GUIDE.md             # NEW: Flexibility & SOLID principles guide
 │   ├── 📄 INSTALLATION.md                  # .NET SDK installation guide
 │   ├── 📄 SUMMARY.md                       # Project summary
 │   ├── 📄 PROJECT_STATUS.md                # Completion status
-│   └── 📄 PROJECT_STRUCTURE.md             # This file
+│   ├── 📄 PROJECT_STRUCTURE.md             # This file
+│   ├── 📄 INDEX.md                         # Documentation index
+│   ├── 📄 START_HERE.md                    # Getting started pointer
+│   ├── 📄 VISUAL_SUMMARY.md                # Visual project summary
+│   └── 📄 COMPLETE_SUMMARY.md              # Complete project overview
 │
 ├── ⚙️ Config/
 │   └── 📄 TestConfiguration.cs             # Centralized configuration
-│       ├── BaseUrl, WikipediaPlaywrightUrl
-│       ├── MediaWikiApiUrl
+│       ├── BaseUrl, MediaWikiApiUrl
+│       ├── DefaultPageTitle (Playwright_(software))
+│       ├── WikipediaPlaywrightUrl (backward compatible)
+│       ├── GetWikipediaPageUrl(pageTitle) - NEW: Dynamic URL generation
 │       ├── Browser settings (headless, timeout, type)
 │       ├── Screenshot path
 │       └── Report path
@@ -31,18 +38,29 @@ QA- Home_Assignment_Genpact/
 │   │   ├── NavigateTo()
 │   │   ├── GetPageTitle()
 │   │   ├── WaitForLoad()
-│   │   └── TakeScreenshot()
+│   │   ├── TakeScreenshot()
+│   │   ├── GetThemeClass()                  # Task 3: Get current theme
+│   │   ├── IsNightTheme()                   # Task 3: Check if night theme
+│   │   ├── IsDayTheme()                     # Task 3: Check if day theme
+│   │   ├── OpenAppearanceMenu()             # Task 3: Open appearance menu
+│   │   ├── SwitchToDayTheme()              # Task 3: Switch to day theme
+│   │   ├── SwitchToNightTheme()            # Task 3: Switch to night theme
+│   │   ├── ToggleTheme()                    # Task 3: Toggle theme
+│   │   └── IsAppearanceMenuAccessible()    # Task 3: Verify menu access
 │   │
 │   └── 📄 WikipediaPlaywrightPage.cs       # Wikipedia-specific page
 │       ├── GetDebuggingFeaturesText()       # Task 1: Extract section via UI
-│       ├── GetMicrosoftDevToolsTechnologies() # Task 2: Get tech names
-│       ├── ChangeColorToDark()              # Task 3: Change theme
-│       ├── IsDarkModeActive()               # Task 3: Verify theme
-│       └── GetCurrentTheme()                # Task 3: Get theme state
+│       └── GetMicrosoftDevToolsTechnologies() # Task 2: Get tech names
 │
 ├── 🔌 Services/ (API Integration)
-│   └── 📄 MediaWikiApiService.cs           # MediaWiki Parse API
-│       ├── GetSectionText()                 # Task 1: Extract section via API
+│   └── 📄 MediaWikiApiService.cs           # MediaWiki Parse API (SOLID refactored)
+│       ├── GetSectionText()                 # Main: Extract section via API
+│       ├── FindSectionNumberByTitle()       # Find section by title
+│       ├── FetchSectionHtml()               # Fetch HTML from API
+│       ├── ExtractTextFromHtml()            # Coordinate text extraction
+│       ├── ExtractParagraphText()           # Extract paragraph text
+│       ├── ExtractListItemsText()           # Extract list items
+│       ├── CleanAndDecodeText()             # Clean and decode text
 │       └── GetAllSections()                 # Get all page sections
 │
 ├── 🛠️ Utils/ (Utility Classes)
@@ -51,21 +69,9 @@ QA- Home_Assignment_Genpact/
 │   │   ├── CountUniqueWords()              # Task 1: Count words
 │   │   └── GetUniqueWords()                # Task 1: Get word set
 │   │
-│   ├── 📄 ExtentReportManager.cs           # HTML report generation
-│   │   ├── GetInstance()                    # Singleton pattern
-│   │   └── Flush()                          # Generate report
-│   │
-│   ├── 📄 TestDataHelper.cs                # Test data management
-│   │   ├── SaveTextToFile()
-│   │   ├── GenerateComparisonReport()
-│   │   └── CalculateSimilarity()
-│   │
-│   └── 📄 BrowserHelper.cs                 # Browser operation helpers
-│       ├── WaitForCondition()
-│       ├── ScrollIntoView()
-│       ├── GetComputedStyle()
-│       ├── ElementExists()
-│       └── WaitForNetworkIdle()
+│   └── 📄 ExtentReportManager.cs           # HTML report generation
+│       ├── GetInstance()                    # Singleton pattern
+│       └── Flush()                          # Generate report
 │
 ├── 🧪 Tests/
 │   ├── 📄 BaseTest.cs                      # Base test class
@@ -94,18 +100,11 @@ QA- Home_Assignment_Genpact/
 │   │   └── ✅ VerifyColorBetaSectionIsAccessible
 │   │       └── Validates UI accessibility
 │   │
-│   ├── 📄 CompleteTestSuite.cs             # Full Test Suite
-│   │   ├── ✅ RunTask1() - Executes Task 1
-│   │   ├── ✅ RunTask2() - Executes Task 2
-│   │   └── ✅ RunTask3() - Executes Task 3
-│   │
-│   └── 📁 UnitTests/
-│       └── 📄 TextNormalizerTests.cs       # Unit tests for utilities
-│           ├── ✅ Normalize_ShouldNormalizeTextCorrectly (5 cases)
-│           ├── ✅ CountUniqueWords_ShouldCountCorrectly
-│           ├── ✅ GetUniqueWords_ShouldReturnUniqueWords
-│           ├── ✅ Normalize_EmptyString_ShouldReturnEmpty
-│           └── ✅ CountUniqueWords_EmptyString_ShouldReturnZero
+│   └── 📄 ExampleTests_DifferentWikipediaPages.cs  # NEW: Example tests
+│       ├── ✅ Example_TestPythonPage
+│       ├── ✅ Example_TestSeleniumPage
+│       ├── ✅ Example_ExtractSectionFromDifferentPage
+│       └── ✅ Example_TestMultipleProgrammingLanguages (TestCase)
 │
 ├── 🤖 .github/
 │   └── workflows/
@@ -127,9 +126,8 @@ QA- Home_Assignment_Genpact/
 │   └── 📄 setup.ps1                        # Windows PowerShell setup
 │       └── Same steps as setup.sh
 │
-├── 📊 test-results/ (Generated during test execution)
-│   ├── TestReport.html                     # ExtentReports HTML report
-│   └── TestResults.json                    # Test results metadata
+├── 📊 TestResults/ (Generated during test execution)
+│   └── ExtentTestReport.html               # ExtentReports HTML report
 │
 └── 📸 Screenshots/ (Generated on test failure)
     ├── Task1_TestName_timestamp.png
@@ -140,14 +138,13 @@ QA- Home_Assignment_Genpact/
 ## 📈 File Statistics
 
 ### Source Code Files
-- **C# Files**: 17
+- **C# Files**: 12
   - Config: 1
   - PageObjects: 2
   - Services: 1
-  - Utils: 4
-  - Tests: 6
-  - Unit Tests: 1
-  - Base Classes: 2
+  - Utils: 2
+  - Tests: 5
+  - Base Classes: 1
 
 ### Configuration Files
 - **Project Files**: 3
@@ -158,8 +155,8 @@ QA- Home_Assignment_Genpact/
   - `.gitignore`
 
 ### Documentation Files
-- **Markdown Docs**: 8
-  - Main docs: 7
+- **Markdown Docs**: 12
+  - Main docs: 11
   - CI/CD docs: 1 (in workflow comments)
 
 ### Setup Scripts
@@ -167,25 +164,25 @@ QA- Home_Assignment_Genpact/
   - Unix/Mac: 1
   - Windows: 1
 
-### Total Files: 32 files
+### Total Files: 30 files
 
 ## 📊 Code Metrics
 
 ### Lines of Code (Estimated)
-- **Configuration**: ~50 lines
-- **PageObjects**: ~300 lines
-- **Services**: ~150 lines
-- **Utils**: ~400 lines
-- **Tests**: ~800 lines
-- **Documentation**: ~5,000+ lines
-- **Total Code**: ~2,000+ lines
-- **Total with Docs**: ~7,000+ lines
+- **Configuration**: ~80 lines (improved flexibility)
+- **PageObjects**: ~450 lines (BasePage expanded)
+- **Services**: ~200 lines (SOLID refactored)
+- **Utils**: ~200 lines (cleaned up)
+- **Tests**: ~900 lines (added examples)
+- **Documentation**: ~6,000+ lines (added FLEXIBILITY_GUIDE.md)
+- **Total Code**: ~1,800+ lines
+- **Total with Docs**: ~8,000+ lines
 
 ### Test Metrics
-- **Total Tests**: 15
-- **Test Classes**: 5
-- **Categories**: 4 (UI, API, Integration, Unit)
-- **Test Methods**: 15
+- **Total Tests**: 11
+- **Test Classes**: 4
+- **Categories**: 4 (UI, API, Integration, Example)
+- **Test Methods**: 11
 
 ## 🎯 File Purposes
 
@@ -205,15 +202,13 @@ QA- Home_Assignment_Genpact/
 ### Service Layer
 | File | Purpose | Key Content |
 |------|---------|-------------|
-| `MediaWikiApiService.cs` | API integration | Parse API methods |
+| `MediaWikiApiService.cs` | API integration | 7 focused methods (SOLID) |
 
 ### Utility Layer
 | File | Purpose | Key Content |
 |------|---------|-------------|
 | `TextNormalizer.cs` | Text processing | Normalize, count words |
 | `ExtentReportManager.cs` | HTML reports | Report generation |
-| `TestDataHelper.cs` | Data comparison | Compare, analyze texts |
-| `BrowserHelper.cs` | Browser helpers | Wait, scroll, check |
 
 ### Test Layer
 | File | Tests | Purpose |
@@ -221,9 +216,8 @@ QA- Home_Assignment_Genpact/
 | `BaseTest.cs` | 0 | Base class with setup/teardown |
 | `Task1_DebuggingFeaturesTests.cs` | 3 | Extract & compare sections |
 | `Task2_MicrosoftDevToolsTests.cs` | 2 | Validate technology links |
-| `Task3_ColorThemeTests.cs` | 2 | Change theme to Dark |
-| `CompleteTestSuite.cs` | 3 | Run all tasks together |
-| `TextNormalizerTests.cs` | 5 | Unit tests for utilities |
+| `Task3_ColorThemeTests.cs` | 2 | Change theme to Dark/Night |
+| `ExampleTests_DifferentWikipediaPages.cs` | 4 | Example tests for flexibility |
 
 ## 🔍 Important Files for Review
 
@@ -237,15 +231,18 @@ QA- Home_Assignment_Genpact/
 
 ### Should Review (Architecture)
 7. ✅ `ARCHITECTURE.md` - Design details
-8. ✅ `Config/TestConfiguration.cs` - Configuration
-9. ✅ `Utils/TextNormalizer.cs` - Text processing
-10. ✅ `Tests/BaseTest.cs` - Test base class
+8. ✅ `FLEXIBILITY_GUIDE.md` - NEW: SOLID & flexibility patterns
+9. ✅ `Config/TestConfiguration.cs` - Configuration
+10. ✅ `Utils/TextNormalizer.cs` - Text processing
+11. ✅ `Tests/BaseTest.cs` - Test base class
+12. ✅ `PageObjects/BasePage.cs` - Base page with theme methods
 
 ### Nice to Review (Supporting)
-11. ✅ `GETTING_STARTED.md` - Setup guide
-12. ✅ `Utils/ExtentReportManager.cs` - Reporting
-13. ✅ `.github/workflows/playwright.yml` - CI/CD
-14. ✅ `PROJECT_STATUS.md` - Completion status
+13. ✅ `GETTING_STARTED.md` - Setup guide
+14. ✅ `Tests/ExampleTests_DifferentWikipediaPages.cs` - Example tests
+15. ✅ `Utils/ExtentReportManager.cs` - Reporting
+16. ✅ `.github/workflows/playwright.yml` - CI/CD
+17. ✅ `PROJECT_STATUS.md` - Completion status
 
 ## 📦 Dependencies (NuGet Packages)
 
@@ -289,7 +286,35 @@ QA- Home_Assignment_Genpact/
 
 ---
 
-**Last Updated**: October 22, 2025  
-**Total Files**: 32  
-**Total Tests**: 15  
-**Status**: ✅ Complete & Ready for Submission
+## 🆕 Recent Updates (October 23, 2025)
+
+### SOLID Refactoring
+- ✅ MediaWikiApiService split into 7 focused methods
+- ✅ Single Responsibility Principle applied
+- ✅ Better testability and maintainability
+
+### Flexibility Improvements
+- ✅ Dynamic URL generation with `GetWikipediaPageUrl()`
+- ✅ Support for testing any Wikipedia page
+- ✅ Example tests for different pages (Python, Selenium, JavaScript, etc.)
+- ✅ Backward compatibility maintained
+
+### Code Cleanup
+- ✅ Removed unused utilities (TestDataHelper, BrowserHelper)
+- ✅ Moved theme functionality to BasePage
+- ✅ Cleaned up WikipediaPlaywrightPage
+- ✅ Removed unused locators and methods
+
+### Documentation
+- ✅ Added FLEXIBILITY_GUIDE.md
+- ✅ Updated all documentation files
+- ✅ Added usage examples
+
+---
+
+**Last Updated**: October 23, 2025  
+**Total Files**: 30  
+**Total Tests**: 11  
+**Status**: ✅ Complete & Ready for Submission  
+**Architecture**: ✅ SOLID Principles Applied  
+**Flexibility**: ✅ Supports Multiple Wikipedia Pages
