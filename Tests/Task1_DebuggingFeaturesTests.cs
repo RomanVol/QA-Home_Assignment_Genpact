@@ -46,7 +46,7 @@ namespace WikipediaPlaywrightTests.Tests
             
             // Act - Step 2: Extract via API (MediaWiki Parse API)
             LogInfo("Extracting Debugging features section via MediaWiki API");
-            var apiText = await _apiService!.GetSectionText("Playwright_(software)", "Debugging features");
+            var apiText = await _apiService!.GetSectionText(TestConfiguration.DefaultPageTitle, "Debugging features");
             LogInfo($"API Text extracted (first 100 chars): {apiText.Substring(0, Math.Min(100, apiText.Length))}...");
             
             // Print complete API text
@@ -148,7 +148,7 @@ namespace WikipediaPlaywrightTests.Tests
             LogInfo("Testing API extraction of Debugging features section");
             
             // Act
-            var text = await _apiService!.GetSectionText("Playwright_(software)", "Debugging features");
+            var text = await _apiService!.GetSectionText(TestConfiguration.DefaultPageTitle, "Debugging features");
             
             // Print the raw text to console
             Console.WriteLine("=== RAW API TEXT ===");

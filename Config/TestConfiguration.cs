@@ -3,8 +3,24 @@ namespace WikipediaPlaywrightTests.Config
     public static class TestConfiguration
     {
         public static string BaseUrl => "https://en.wikipedia.org";
-        public static string WikipediaPlaywrightUrl => $"{BaseUrl}/wiki/Playwright_(software)";
+        
+        // Default page for Playwright tests
+        public static string DefaultPageTitle => "Playwright_(software)";
+        
+        // Backward compatibility - kept for existing tests
+        public static string WikipediaPlaywrightUrl => GetWikipediaPageUrl(DefaultPageTitle);
+        
         public static string MediaWikiApiUrl => $"{BaseUrl}/w/api.php";
+        
+        /// <summary>
+        /// Generates a Wikipedia page URL for any given page title
+        /// </summary>
+        /// <param name="pageTitle">The Wikipedia page title (e.g., "Playwright_(software)", "Python_(programming_language)")</param>
+        /// <returns>Full Wikipedia URL</returns>
+        public static string GetWikipediaPageUrl(string pageTitle)
+        {
+            return $"{BaseUrl}/wiki/{pageTitle}";
+        }
         
         // Browser settings
         public static bool Headless => false;
