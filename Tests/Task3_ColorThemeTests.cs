@@ -97,34 +97,5 @@ namespace WikipediaPlaywrightTests.Tests
             }
         }
         
-        // [Test]
-        // [Category("UI")]
-        // [Description("Verify Color (beta) section is accessible")]
-        // public async Task VerifyColorBetaSectionIsAccessible()
-        // {
-        //     // Arrange
-        //     LogInfo("Verifying Color (beta) section accessibility");
-            
-        //     // Act
-        //     await _wikipediaPage!.NavigateTo(TestConfiguration.WikipediaPlaywrightUrl);
-        //     await _wikipediaPage.WaitForLoad();
-            
-        //     // Check if appearance menu is accessible
-        //     var isAccessible = await _wikipediaPage.IsAppearanceMenuAccessible();
-            
-        //     // Assert
-        //     isAccessible.Should().BeTrue("Color (beta) button should be visible");
-            
-        //     if (isAccessible)
-        //     {
-        //         await _wikipediaPage.OpenAppearanceMenu();
-                
-        //         var darkOption = Page.Locator("//label[contains(., 'Dark')]");
-        //         var isDarkOptionVisible = await darkOption.IsVisibleAsync();
-                
-        //         isDarkOptionVisible.Should().BeTrue("Dark mode option should be visible after clicking color button");
-        //         LogPass("✓ Color (beta) section is accessible and Dark option is available");
-        //     }
-        // }
     }
 }

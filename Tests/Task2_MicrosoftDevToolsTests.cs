@@ -83,41 +83,6 @@ namespace WikipediaPlaywrightTests.Tests
             }
         }
         
-        // [Test]
-        // [Category("UI")]
-        // [Description("Validate each technology name individually (multiple test approach)")]
-        // [TestCaseSource(nameof(GetTechnologies))]
-        // public async Task Task2_ValidateIndividualTechnologyIsLink(string technologyName)
-        // {
-        //     // Arrange
-        //     LogInfo($"Validating that '{technologyName}' is a link");
-            
-        //     // This test would need to be run after extracting technologies
-        //     // For now, we'll extract them in each test (can be optimized with a fixture)
-        //     await _wikipediaPage!.NavigateTo(TestConfiguration.WikipediaPlaywrightUrl);
-        //     await _wikipediaPage.WaitForLoad();
-            
-        //     var technologies = await _wikipediaPage.GetMicrosoftDevToolsTechnologies();
-        //     var technology = technologies.FirstOrDefault(t => t.Name == technologyName);
-            
-        //     // Assert
-        //     technology.Should().NotBe(default, $"Technology '{technologyName}' should exist");
-        //     technology.IsLink.Should().BeTrue($"Technology '{technologyName}' should be a link");
-            
-        //     LogPass($"✓ '{technologyName}' is a link");
-        // }
-        
-        // private static IEnumerable<string> GetTechnologies()
-        // {
-        //     // This would ideally be populated from a data source
-        //     // For now, returning common expected technologies
-        //     // In a real scenario, this could be extracted once and cached
-        //     return new[]
-        //     {
-        //         "Visual Studio Code",
-        //         "Visual Studio",
-        //         "Azure DevOps"
-        //     };
-        // }
+
     }
 }
