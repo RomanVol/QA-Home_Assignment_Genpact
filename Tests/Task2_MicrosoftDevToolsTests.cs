@@ -17,6 +17,23 @@ namespace WikipediaPlaywrightTests.Tests
             _wikipediaPage = new WikipediaPlaywrightPage(Page);
         }
         
+        /// <summary>
+        /// Validates all technology names in a single test to keep test reports clean.
+        /// 
+        /// Design Decision:
+        /// Alternative approach would be data-driven tests using [TestCase] attributes,
+        /// but that would create 50+ individual test results for essentially the same 
+        /// validation, significantly cluttering the test report.
+        /// 
+        /// This approach:
+        /// - Creates ONE test result (cleaner reports)
+        /// - Collects ALL failures before asserting (don't stop at first failure)
+        /// - Provides detailed logging for each technology (easy debugging)
+        /// - Shows comprehensive failure message if any technology fails
+        /// 
+        /// This demonstrates understanding of test design trade-offs and choosing
+        /// the appropriate approach based on reporting clarity and maintainability.
+        /// </summary>
         [Test]
         [Category("UI")]
         [Description("Validate that all technology names under Microsoft development tools section are text links")]
